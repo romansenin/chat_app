@@ -1,5 +1,6 @@
+import 'package:chat_app/widgets/chat/messages.dart';
+import 'package:chat_app/widgets/chat/new_message.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatScreen extends StatelessWidget {
@@ -38,33 +39,22 @@ class ChatScreen extends StatelessWidget {
           )
         ],
       ),
-      body: StreamBuilder(
-        stream: Firestore.instance
-            .collection('chats/TVslzyO2GcSGp6TBLVHE/messages')
-            .snapshots(),
-        builder: (ctx, streamSnapshot) {
-          if (streamSnapshot.connectionState == ConnectionState.waiting)
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          final documents = streamSnapshot.data.documents;
-          return ListView.builder(
-            itemBuilder: (ctx, index) => Container(
-              padding: EdgeInsets.all(8),
-              child: Text(documents[index]['text']),
-            ),
-            itemCount: documents.length,
-          );
-        },
+      body: Container(
+        child: Column(
+          children: [
+            Expanded(child: Messages()),
+            NewMessage(),
+          ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          Firestore.instance
-              .collection('chats/TVslzyO2GcSGp6TBLVHE/messages')
-              .add({'text': 'This was added by clicking the button!'});
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: Icon(Icons.add),
+      //   onPressed: () {
+      //     Firestore.instance
+      //         .collection('chats/TVslzyO2GcSGp6TBLVHE/messages')
+      //         .add({'text': 'This was added by clicking the button!'});
+      //   },
+      // ),
     );
   }
 }

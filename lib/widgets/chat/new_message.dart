@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NewMessage extends StatefulWidget {
@@ -6,6 +10,18 @@ class NewMessage extends StatefulWidget {
 }
 
 class _NewMessageState extends State<NewMessage> {
+  final _controller = TextEditingController();
+  var _enteredMessage = '';
+
+  void _sendMessage() {
+    FocusScope.of(context).unfocus();
+    Firestore.instance.collection('chat').add({
+      'text': _enteredMessage,
+      'createdAt': Timestamp.now(),
+    });
+    _controller.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,15 +30,37 @@ class _NewMessageState extends State<NewMessage> {
       child: Row(
         children: [
           Expanded(
-            child: TextField(
-              decoration: InputDecoration(labelText: 'Send a message...'),
-              onChanged: (value) {},
-            ),
+            child: Platform.isAndroid
+                ? TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(labelText: 'Send a message...'),
+                    onChanged: (value) {
+                      setState(() {
+                        _enteredMessage = value.trim();
+                      });
+                    },
+                  )
+                : Container(
+                    margin: const EdgeInsets.only(left: 10, bottom: 5),
+                    child: CupertinoTextField(
+                      controller: _controller,
+                      placeholder: 'Send a message...',
+                      onChanged: (value) {
+                        setState(() {
+                          _enteredMessage = value.trim();
+                        });
+                      },
+                    ),
+                  ),
           ),
-          IconButton(
+          Container(
+            margin: EdgeInsets.only(bottom: Platform.isAndroid ? 0 : 5),
+            child: IconButton(
               color: Theme.of(context).primaryColor,
               icon: Icon(Icons.send),
-              onPressed: () {}),
+              onPressed: _enteredMessage.isEmpty ? null : _sendMessage,
+            ),
+          ),
         ],
       ),
     );
