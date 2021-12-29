@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+// import 'dart:io'; // at beginning of file
+// ...
+// final picker = ImagePicker();
+// final pickedImage = await picker.getImage(...);
+// final pickedImageFile = File(pickedImage.path); // requires import 'dart:io';
+
 class MessageBubble extends StatelessWidget {
   MessageBubble(this.message, this.username, this.isMe, {this.key});
 
