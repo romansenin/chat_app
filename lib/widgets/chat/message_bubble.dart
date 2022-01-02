@@ -70,7 +70,7 @@ class MessageBubble extends StatelessWidget {
               backgroundColor: Colors.grey,
               backgroundImage: NetworkImage(userImage),
             ),
-            top: -10,
+            top: 0,
             left: !isMe ? 120 : null,
             right: isMe ? 120 : null,
           ),
