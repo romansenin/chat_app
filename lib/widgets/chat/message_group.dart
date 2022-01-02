@@ -25,16 +25,19 @@ class MessageGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      MessageBubble(
-        messages.first['text'],
-        messages.first['username'],
-        messages.first['userImage'],
-        messages.first['userId'] == currentUserId,
-        isFirst: true,
-        key: ValueKey(messages.first.documentID),
-      ),
-      ...messagesToBubbles(),
-    ]);
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Column(children: [
+        MessageBubble(
+          messages.first['text'],
+          messages.first['username'],
+          messages.first['userImage'],
+          messages.first['userId'] == currentUserId,
+          isFirst: true,
+          key: ValueKey(messages.first.documentID),
+        ),
+        ...messagesToBubbles(),
+      ]),
+    );
   }
 }
