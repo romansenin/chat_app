@@ -22,13 +22,35 @@ class Messages extends StatelessWidget {
                   child: CircularProgressIndicator(),
                 );
               }
-              final chatDocs = chatSnapshot.data.documents;
+              final chatDocs = chatSnapshot.data.documents as List;
+
+              var userId = chatDocs.isNotEmpty
+                  ? chatDocs.first['userId'] as String
+                  : null;
+              final messageGroups = [];
+              final group = [];
+
+              for (var i = 0; i < chatDocs.length; i++) {
+                final chat = chatDocs[i];
+
+                if (chat['userId'] != userId) {
+                  messageGroups.add(group);
+                  group.clear();
+                  group.add(chat);
+                  userId = chat['userId'];
+                } else {
+                  group.add(chat);
+                }
+              }
+
+              messageGroups.add(group);
 
               return ListView.builder(
                 reverse: true,
                 itemBuilder: (ctx, index) => MessageBubble(
                   chatDocs[index]['text'],
                   chatDocs[index]['username'],
+                  chatDocs[index]['userImage'],
                   chatDocs[index]['userId'] == futureSnapshot.data.uid,
                   key: ValueKey(chatDocs[index].documentID),
                 ),
