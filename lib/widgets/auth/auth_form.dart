@@ -63,7 +63,9 @@ class _AuthFormState extends State<AuthForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Container(
+      margin: EdgeInsets.only(
+          top: MediaQuery.of(context).size.height / (_isLogin ? 3 : 5)),
       child: Card(
         margin: EdgeInsets.all(20),
         child: SingleChildScrollView(
@@ -90,6 +92,7 @@ class _AuthFormState extends State<AuthForm> {
                     onSaved: (value) {
                       _userEmail = value;
                     },
+                    textInputAction: TextInputAction.next,
                   ),
                   if (!_isLogin)
                     TextFormField(
@@ -106,6 +109,7 @@ class _AuthFormState extends State<AuthForm> {
                       onSaved: (value) {
                         _userName = value;
                       },
+                      textInputAction: TextInputAction.next,
                     ),
                   TextFormField(
                     key: ValueKey('password'),
