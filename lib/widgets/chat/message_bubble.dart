@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 
 class MessageBubble extends StatelessWidget {
   MessageBubble(this.message, this.username, this.userImage, this.isMe,
-      {this.key});
+      {this.isFirst = false, this.key});
 
   final Key key;
   final String message;
   final String username;
   final String userImage;
   final bool isMe;
+  final bool isFirst;
 
   @override
   Widget build(BuildContext context) {
@@ -63,14 +64,15 @@ class MessageBubble extends StatelessWidget {
             ),
           ],
         ),
-        Positioned(
-          child: CircleAvatar(
-            backgroundImage: NetworkImage(userImage),
+        if (isFirst)
+          Positioned(
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(userImage),
+            ),
+            top: -10,
+            left: !isMe ? 120 : null,
+            right: isMe ? 120 : null,
           ),
-          top: -10,
-          left: !isMe ? 120 : null,
-          right: isMe ? 120 : null,
-        ),
       ],
       clipBehavior: Clip.none,
     );

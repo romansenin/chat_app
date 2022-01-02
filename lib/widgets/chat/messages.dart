@@ -1,8 +1,7 @@
+import 'package:chat_app/widgets/chat/message_group.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import 'message_bubble.dart';
 
 class Messages extends StatelessWidget {
   @override
@@ -34,7 +33,7 @@ class Messages extends StatelessWidget {
                 final chat = chatDocs[i];
 
                 if (chat['userId'] != userId) {
-                  messageGroups.add(group);
+                  messageGroups.add(group.reversed.toList());
                   group.clear();
                   group.add(chat);
                   userId = chat['userId'];
@@ -47,14 +46,9 @@ class Messages extends StatelessWidget {
 
               return ListView.builder(
                 reverse: true,
-                itemBuilder: (ctx, index) => MessageBubble(
-                  chatDocs[index]['text'],
-                  chatDocs[index]['username'],
-                  chatDocs[index]['userImage'],
-                  chatDocs[index]['userId'] == futureSnapshot.data.uid,
-                  key: ValueKey(chatDocs[index].documentID),
-                ),
-                itemCount: chatDocs.length,
+                itemBuilder: (ctx, index) =>
+                    MessageGroup(messageGroups[index], futureSnapshot.data.uid),
+                itemCount: messageGroups.length,
               );
             });
       },

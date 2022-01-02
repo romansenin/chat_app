@@ -7,20 +7,34 @@ class MessageGroup extends StatelessWidget {
   final List<dynamic> messages;
   final String currentUserId;
 
+  List<Widget> messagesToBubbles() {
+    messages.removeAt(0);
+
+    return messages
+        .map(
+          (message) => MessageBubble(
+            message['text'],
+            message['username'],
+            message['userImage'],
+            message['userId'] == currentUserId,
+            key: ValueKey(message.documentID),
+          ),
+        )
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: messages
-          .map(
-            (message) => MessageBubble(
-              message['text'],
-              message['username'],
-              message['userImage'],
-              message['userId'] == currentUserId,
-              key: ValueKey(message.documentID),
-            ),
-          )
-          .toList(),
-    );
+    return Column(children: [
+      MessageBubble(
+        messages.first['text'],
+        messages.first['username'],
+        messages.first['userImage'],
+        messages.first['userId'] == currentUserId,
+        isFirst: true,
+        key: ValueKey(messages.first.documentID),
+      ),
+      ...messagesToBubbles(),
+    ]);
   }
 }
